@@ -2,8 +2,8 @@ clc;
 clear all;
 close all;
 
-data_dir = '/home/sriharsha/Desktop/scripts/scripts/';
-fileid = '2.wav';
+data_dir = '/home/sriharsha/Desktop/scripts/audio_files/';
+fileid = 'ex_1.wav';
 
 filename = sprintf('%s%s',data_dir,fileid);
 
@@ -479,7 +479,7 @@ else
     
 end
 
-fname1 = fileid(1:end-4);
+fname1 = filename(1:end-4);
 fname = sprintf('%s%s',fname1,'.txt');
 fid = fopen(fname,'w');
 
