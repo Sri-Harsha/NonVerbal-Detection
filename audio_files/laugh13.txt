@@ -1,0 +1,5 @@
+0.000000	0.992250	non laughter
+0.992250	2.502125	laughter
+2.502125	5.864500	non laughter
+5.864500	6.048250	laughter
+6.048250	6.220000	non laughter
