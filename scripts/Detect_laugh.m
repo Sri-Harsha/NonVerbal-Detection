@@ -3,7 +3,7 @@ clear all;
 close all;
 
 data_dir = '/home/sriharsha/Desktop/scripts/audio_files/';
-fileid = 'ex_1.wav';
+fileid = 'ex_196.wav';
 
 filename = sprintf('%s%s',data_dir,fileid);
 
@@ -171,7 +171,7 @@ for i=1:columns_voiced_regions
     %%% threshold, then give it a bias that it might be a laugh segment by
     %%% adding the count by 0.5
     if flag_st == 0
-        if max(temp_st) > 0.16  %%%%% changed from 0.2 to 0.16
+        if max(temp_st) > 0.17  %%%%% changed from 0.2 to 0.17
             laughcount = laughcount+0.5;
         end
     end
@@ -448,7 +448,11 @@ end
 
 laughter_regions_sig = laughter_regions_mod3;
 
-%%%%%%%%%%%%%%%  Code to write laughter boundaries top a file  %%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Post-Processing End  %%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Algorithm End  %%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%  Code to write laughter boundaries to a file  %%%%%%%%%%%%%
 
 laughter_bound = laughter_regions_sig;
 laughter_bound(1) = 0;
@@ -499,100 +503,3 @@ else
     fprintf(fid,'%f\t%f\t%s',non_laughter_st_time(1),non_laughter_end_time(1),'non laughter');
     
 end
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Post-Processing End  %%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Algorithm End  %%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%% Plotting for individual features and all the features combined %%%%%
-
-%%% Assigning values for the sake of plotting %%%
-
-laughter_regions_pp_sig = zeros(1,lenspeech1);				%pp decision signal
-if(length(laughter_regions_pp) ~=0)
-	for i = 1:length(laughter_regions_pp(1,:))
-		laughter_regions_pp_sig(laughter_regions_pp(1,i):laughter_regions_pp(2,i)) = 10;
-	end
-end
-
-laughter_regions_st_sig = zeros(1,lenspeech1);				%st decision signal
-if(length(laughter_regions_st) ~=0)
-	for i = 1:length(laughter_regions_st(1,:))
-		laughter_regions_st_sig(laughter_regions_st(1,i):laughter_regions_st(2,i)) = max(starr);
-	end
-end
-
-laughter_regions_ratio_sig = zeros(1,lenspeech1);			%ratio decision signal
-if(length(laughter_regions_ratio) ~=0)
-	for i = 1:length(laughter_regions_ratio(1,:))
-		laughter_regions_ratio_sig(laughter_regions_ratio(1,i):laughter_regions_ratio(2,i)) = 0.015;
-	end
-end
-
-laughter_regions_ppdiff_sig = zeros(1,lenspeech1);			%ppdiff decision signal
-if(length(laughter_regions_ppdiff) ~=0)
-	for i = 1:length(laughter_regions_ppdiff(1,:))
-		laughter_regions_ppdiff_sig(laughter_regions_ppdiff(1,i):laughter_regions_ppdiff(2,i)) = max(pitchperiodsdiffarr)*0.9;
-	end
-end
-
-laughter_regions_stdiff_sig = zeros(1,lenspeech1);			%stdiff decision signal
-if(length(laughter_regions_stdiff) ~=0)
-	for i = 1:length(laughter_regions_stdiff(1,:))
-		laughter_regions_stdiff_sig(laughter_regions_stdiff(1,i):laughter_regions_stdiff(2,i)) = max(stdiffarr)*0.9;
-	end
-end
-
-%x_alphas = (lenspeech1/fs)*(1.025);
-x_alphas = 5.4*(1.025);
-
-h=figure;
-ax(1)=subplot(611);plot([1:lenspeech1]/fs,speech1/max(abs(speech1)),'k');%hold on;stem(find(arr>0)/fs,arr(find(arr>0)),'k');
-ylim([-1 1]);grid;text(x_alphas,0,'(a)');
-%set(gca,'xTick',[3.5:0.5:5.5],'xTickLabel',[0:0.5:2.0]);
-hold on;plot((1:lenspeech1)/fs,0.6 * laugh_regions_sig,'r');
-%hold on;plot([1:lenspeech1]/fs,actual_laugharr,'--k');
-ax(2)=subplot(612);plot(find(parr~=0)/fs,parr(find(parr~=0))/(fs/1000),'k.');grid;ylim([0 15]);ylabel('T_{0} (ms)');text(x_alphas,7.5,'(b)');
-hold on;plot([1:lenspeech1]/fs,laughter_regions_pp_sig,'r');
-%set(gca,'xTick',[3.5:0.5:5.5],'xTickLabel',[0:0.5:2.0]);
-ax(3)=subplot(613);plot(find(starr~=0)/fs,starr(find(starr~=0)),'k.');grid;text(x_alphas,0.2,'(c)');
-hold on;plot([1:lenspeech1]/fs,laughter_regions_st_sig,'r');
-%set(gca,'xTick',[3.5:0.5:5.5],'xTickLabel',[0:0.5:2.0]);
-%ax(4)=subplot(614);plot(find(ratioofStrandPit~=0)/fs,ratioofStrandPit(find(ratioofStrandPit~=0)),'k.');grid;ylabel('');text(x_alphas,0.01,'(d)');
-ax(4)=subplot(614);plot(find(ratioofStrandPitarr~=0)/fs,ratioofStrandPitarr(find(ratioofStrandPitarr~=0)),'k.');grid;text(x_alphas,0.01,'(d)');ylim([0 0.02]);
-hold on;plot([1:lenspeech1]/fs,laughter_regions_ratio_sig,'r');
-%set(gca,'xTick',[3.5:0.5:5.5],'xTickLabel',[0:0.5:2.0]);
-ax(5)=subplot(615);plot(find(pitchperiodsdiffarr~=0)/fs,pitchperiodsdiffarr(find(pitchperiodsdiffarr~=0)),'k.');grid;text(x_alphas,0.0075,'(e)');
-hold on;plot([1:lenspeech1]/fs,laughter_regions_ppdiff_sig,'r');
-%set(gca,'xTick',[3.5:0.5:5.5],'xTickLabel',[0:0.5:2.0]);
-ax(6)=subplot(616);plot(find(stdiffarr~=0)/fs,stdiffarr(find(stdiffarr~=0)),'k.');grid;text(x_alphas,0.01,'(f)');
-hold on;plot([1:lenspeech1]/fs,laughter_regions_stdiff_sig,'r');
-%set(gca,'xTick',[3.5:0.5:5.5],'xTickLabel',[0:0.5:2.0]);
-linkaxes(ax,'x');xlabel('Time(s)');
-xlim([1 lenspeech1]/fs);
-%xlim([3.5 5.5]);
-
-h=figure;
-ax(1)=subplot(611);plot([1:lenspeech1]/fs,speech1/max(abs(speech1)),'k');%hold on;stem(find(arr>0)/fs,arr(find(arr>0)),'k');
-ylim([-1 1]);grid;text(x_alphas,0,'(a)');
-%set(gca,'xTick',[3.5:0.5:5.5],'xTickLabel',[0:0.5:2.0]);
-hold on;plot((1:lenspeech1)/fs,0.8 * laughter_regions_sig,'r');
-%hold on;plot([1:lenspeech1]/fs,actual_laugharr,'--k');
-ax(2)=subplot(612);plot(find(parr~=0)/fs,parr(find(parr~=0))/(fs/1000),'k.');grid;ylim([0 15]);ylabel('T_{0} (ms)');text(x_alphas,7.5,'(b)');
-hold on;plot([1:lenspeech1]/fs,laughter_regions_pp_sig,'r');
-%set(gca,'xTick',[3.5:0.5:5.5],'xTickLabel',[0:0.5:2.0]);
-ax(3)=subplot(613);plot(find(starr~=0)/fs,starr(find(starr~=0)),'k.');grid;text(x_alphas,0.2,'(c)');
-hold on;plot([1:lenspeech1]/fs,laughter_regions_st_sig,'r');
-%set(gca,'xTick',[3.5:0.5:5.5],'xTickLabel',[0:0.5:2.0]);
-%ax(4)=subplot(614);plot(find(ratioofStrandPit~=0)/fs,ratioofStrandPit(find(ratioofStrandPit~=0)),'k.');grid;ylabel('');text(x_alphas,0.01,'(d)');
-ax(4)=subplot(614);plot(find(ratioofStrandPitarr~=0)/fs,ratioofStrandPitarr(find(ratioofStrandPitarr~=0)),'k.');grid;text(x_alphas,0.01,'(d)');ylim([0 0.02]);
-hold on;plot([1:lenspeech1]/fs,laughter_regions_ratio_sig,'r');
-%set(gca,'xTick',[3.5:0.5:5.5],'xTickLabel',[0:0.5:2.0]);
-ax(5)=subplot(615);plot(find(pitchperiodsdiffarr~=0)/fs,pitchperiodsdiffarr(find(pitchperiodsdiffarr~=0)),'k.');grid;text(x_alphas,0.0075,'(e)');
-hold on;plot([1:lenspeech1]/fs,laughter_regions_ppdiff_sig,'r');
-%set(gca,'xTick',[3.5:0.5:5.5],'xTickLabel',[0:0.5:2.0]);
-ax(6)=subplot(616);plot(find(stdiffarr~=0)/fs,stdiffarr(find(stdiffarr~=0)),'k.');grid;text(x_alphas,0.01,'(f)');
-hold on;plot([1:lenspeech1]/fs,laughter_regions_stdiff_sig,'r');
-%set(gca,'xTick',[3.5:0.5:5.5],'xTickLabel',[0:0.5:2.0]);
-linkaxes(ax,'x');xlabel('Time(s)');
-xlim([1 lenspeech1]/fs);

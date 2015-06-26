@@ -8,7 +8,7 @@ function [normzfSig, zfSig, gcisig, gci, es, esSig, fs, voiced_segments, winLeng
 %	[wav fs]=wavread(wavFile);
 	wav=resample(wav,8000,fs);
 	fs=8000;
-	disp('Sampling Frequency:');
+    % 	disp('Sampling Frequency:');
 	lwav=length(wav);
 
 	vnv(1)=0;vnv(2)=0;		%exceptions
@@ -49,13 +49,13 @@ function [normzfSig, zfSig, gcisig, gci, es, esSig, fs, voiced_segments, winLeng
 	dslope=abs(pslope(1:l))-abs(nslope(1:l));
 	if(sum(dslope>0)>length(dslope)/2)
 		gci=pzc;
-		disp('Polarity of the signal: +ve');
+        % 		disp('Polarity of the signal: +ve');
 	else
 		gci=nzc;
 		wav=-wav;
 		zfSig=-zfSig;
         normzfSig = -normzfSig;
-		disp('Polarity of the signal : -ve');
+        % 		disp('Polarity of the signal : -ve');
     end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
