@@ -3,7 +3,7 @@ clear all;
 close all;
 
 data_dir = '/home/sriharsha/Desktop/scripts/audio_files/';
-fileid = 'ex_196.wav';
+fileid = 'laugh14.wav';
 
 filename = sprintf('%s%s',data_dir,fileid);
 
