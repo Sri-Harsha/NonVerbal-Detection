@@ -4,7 +4,7 @@ foldet = dir(fullfile(datadir,'*.wav'));
 folnam = {foldet.name};
 nf = length(folnam);
 
-disp('Started execution');
+disp('Started execution for detecting laugh segments');
 
 for fileno = 1 : nf
     
@@ -511,6 +511,6 @@ for fileno = 1 : nf
     
 end
 
-disp('Completed execution of all files');
+disp('Laughter segment detection done for all files');
 
 exit;

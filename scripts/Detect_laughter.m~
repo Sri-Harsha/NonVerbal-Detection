@@ -511,6 +511,6 @@ for fileno = 1 : nf
     
 end
 
-
+disp('Completed execution of all files');
 
 exit;
